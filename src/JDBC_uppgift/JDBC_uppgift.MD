@@ -1,0 +1,1 @@
+JDBC_uppgift: Utifrån en färdig databas, gör en enkel console-dashboard som läser från databasen in i ditt Java-program. I konsolen, skriv ut antalet barn, antalet nissar, namnen på alla nissarna och medelvärdet på barnens "snällhet".

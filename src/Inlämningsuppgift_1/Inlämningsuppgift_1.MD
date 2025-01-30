@@ -1,0 +1,1 @@
+Den första inlämningsuppgiften gick ut på att skapa en databas för en skobutik. Med ett komplett ER-diagram, relationsmodell i form av tabeller i Excel samt databasen i sig och en query-fil som besvarade uppgiftens frågor.
