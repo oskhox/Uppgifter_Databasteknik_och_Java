@@ -1,0 +1,1 @@
+Den andra inlämningsuppgiften gick ut på att utöka databasen med en stored procedure, ett java-program för interaktion med databasen, transaktioner, trigger och felhantering.
