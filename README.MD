@@ -1,0 +1,1 @@
+Målet med kursen är att den studerande ska kunna utveckla och använda en optimerad databas med SQL i enlighet med yrkesmässiga riktlinjer.
