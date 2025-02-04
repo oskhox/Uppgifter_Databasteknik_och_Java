@@ -7,6 +7,8 @@ package INL2;
 
 import java.io.FileInputStream;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class ShoeProgram {
@@ -27,12 +29,18 @@ public class ShoeProgram {
 
              Statement stmt = con.createStatement()) {
 
-            //Query nr 1
-            ResultSet rs1 = stmt.executeQuery("select count(*) from child");
+            //Query samt objekt för Märke
+            ResultSet rs1 = stmt.executeQuery("select id, namn from Märke");
+            List<Marke> marke = new ArrayList<>();
             while (rs1.next()) {
-                int numberOfChildren = rs1.getInt(1);
-                System.out.println("Antal barn: " + numberOfChildren);
+                Marke temp = new Marke();
+                int id1 = rs1.getInt("id");
+                temp.setId(id1);
+                String namn1 = rs1.getString("namn");
+                temp.setNamn(namn1);
+                marke.add(temp);
             }
+                marke.forEach(m -> System.out.println(m.getId() + " " + m.getNamn()));
 
 
             //Programmet och queries
