@@ -35,7 +35,7 @@ public class ShoeProgram {
                 temp.setNamn(namn1);
                 marke.add(temp);
             }
-                marke.forEach(m -> System.out.println(m.getId() + " " + m.getNamn()));
+            marke.forEach(m -> System.out.println(m.getId() + " " + m.getNamn()));
 
             //Query samt objekt för Skonamn
             ResultSet rs2 = stmt.executeQuery("select titel, MärkeID from Skonamn");
@@ -70,7 +70,7 @@ public class ShoeProgram {
                 sko.add(temp);
             }
             sko.forEach(m -> System.out.println(m.getId() + " " + m.getSkonamnTitel() + " " + m.getStorlek() + " " + m.getFarg() +
-                   " " + m.getPris() + " " + m.getAntal_i_lager()));
+                    " " + m.getPris() + " " + m.getAntal_i_lager()));
 
             //Query samt objekt för Kategori
             ResultSet rs4 = stmt.executeQuery("select id, namn from Kategori");
