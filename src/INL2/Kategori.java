@@ -3,11 +3,11 @@ package INL2;
 public class Kategori {
 
     protected int id;
-    protected int namn;
+    protected String namn;
 
     public Kategori(){}
 
-    public Kategori(int id, int namn) {
+    public Kategori(int id, String namn) {
         this.id = id;
         this.namn = namn;
     }
@@ -20,11 +20,11 @@ public class Kategori {
         this.id = id;
     }
 
-    public int getNamn() {
+    public String getNamn() {
         return namn;
     }
 
-    public void setNamn(int namn) {
+    public void setNamn(String namn) {
         this.namn = namn;
     }
 }
