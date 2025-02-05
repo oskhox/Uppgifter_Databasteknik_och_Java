@@ -16,39 +16,36 @@ public class ShoeProgram {
     private int activeOrderId;
     Connection con;
 
-    private List<Marke> marke = new ArrayList<>();
-    private List<Skonamn> skonamn = new ArrayList<>();
-    private List<Sko> sko = new ArrayList<>();
-    private List<Kategori> kategori = new ArrayList<>();
-    private List<Kategori_Sko> kategori_sko = new ArrayList<>();
-    private List<Kund> kund = new ArrayList<>();
-    private List<Bestallning> bestallning = new ArrayList<>();
-    private List<Skoval> skoval = new ArrayList<>();
+    private final List<Marke> marke = new ArrayList<>();
+    private final List<Skonamn> skonamn = new ArrayList<>();
+    private final List<Sko> sko = new ArrayList<>();
+    private final List<Kategori> kategori = new ArrayList<>();
+    private final List<Kategori_Sko> kategori_sko = new ArrayList<>();
+    private final List<Kund> kund = new ArrayList<>();
+    private final List<Bestallning> bestallning = new ArrayList<>();
+    private final List<Skoval> skoval = new ArrayList<>();
 
+    //Skapar upp connection redan i konstruktorn så att jag kan använda den i interaktion med SP senare
     public ShoeProgram() {
         sc = new Scanner(System.in);
+        Properties p = new Properties();
 
-
+        try {
+            p.load(new FileInputStream("src/INL2/Settings.properties"));
+            con = DriverManager.getConnection(
+                    p.getProperty("connectionString"),
+                    p.getProperty("name"),
+                    p.getProperty("password"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         tablesToObjects();
         verifyEmail();
     }
 
     public void tablesToObjects() {
-        Properties p = new Properties();
-
-        try {
-            p.load(new FileInputStream("src/INL2/Settings.properties"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try (Connection con = DriverManager.getConnection(
-                p.getProperty("connectionString"),
-                p.getProperty("name"),
-                p.getProperty("password"));
-
-             Statement stmt = con.createStatement()) {
+        try (Statement stmt = con.createStatement()) {
 
             //Query samt objekt för Märke
             ResultSet rs1 = stmt.executeQuery("select id, namn from Märke");
@@ -60,7 +57,6 @@ public class ShoeProgram {
                 temp.setNamn(namn1);
                 marke.add(temp);
             }
-            // marke.forEach(m -> System.out.println(m.getId() + " " + m.getNamn()));
 
             //Query samt objekt för Skonamn
             ResultSet rs2 = stmt.executeQuery("select titel, MärkeID from Skonamn");
@@ -72,12 +68,12 @@ public class ShoeProgram {
                 temp.setMarkeID(märkeID);
                 skonamn.add(temp);
             }
-            // skonamn.forEach(m -> System.out.println(m.getTitel() + " " + m.getMarkeID()));
 
             //Query samt objekt för Sko
             ResultSet rs3 = stmt.executeQuery("select id, skonamnTitel, storlek, färg, pris, antal_i_lager from Sko");
             while (rs3.next()) {
                 Sko temp = new Sko();
+
                 int id3 = rs3.getInt("id");
                 temp.setId(id3);
                 String skonamnTitel = rs3.getString("skonamnTitel");
@@ -97,30 +93,31 @@ public class ShoeProgram {
             ResultSet rs4 = stmt.executeQuery("select id, namn from Kategori");
             while (rs4.next()) {
                 Kategori temp = new Kategori();
+
                 int id4 = rs4.getInt("id");
                 temp.setId(id4);
                 String namn4 = rs4.getString("namn");
                 temp.setNamn(namn4);
                 kategori.add(temp);
             }
-            // kategori.forEach(m -> System.out.println(m.getId() + " " + m.getNamn()));
 
             //Query samt objekt för Kategori_sko
             ResultSet rs5 = stmt.executeQuery("select kategoriID, skoID from Kategori_Sko");
             while (rs5.next()) {
                 Kategori_Sko temp = new Kategori_Sko();
+
                 int kategoriID = rs5.getInt("kategoriID");
                 temp.setKategoriID(kategoriID);
                 int skoID5 = rs5.getInt("skoID");
                 temp.setSkoID(skoID5);
                 kategori_sko.add(temp);
             }
-            // kategori_sko.forEach(m -> System.out.println(m.getKategoriID() + " " + m.getSkoID()));
 
             //Query samt objekt för Kund
             ResultSet rs6 = stmt.executeQuery("select id, för_och_efternamn, ort, epost, losenord from Kund");
             while (rs6.next()) {
                 Kund temp = new Kund();
+
                 int id6 = rs6.getInt("id");
                 temp.setId(id6);
                 String för_och_efternamn6 = rs6.getString("för_och_efternamn");
@@ -133,13 +130,12 @@ public class ShoeProgram {
                 temp.setLosenord(losenord);
                 kund.add(temp);
             }
-            // kund.forEach(m -> System.out.println(m.getId() + " " + m.getFor_och_efternamn() + " " + m.getOrt() + " " +
-            //        m.getEpost() + " " + m.getLosenord()));
 
             //Query samt objekt för Beställning
             ResultSet rs7 = stmt.executeQuery("select id, datum, kundID, status from Beställning");
             while (rs7.next()) {
                 Bestallning temp = new Bestallning();
+
                 int id7 = rs7.getInt("id");
                 temp.setId(id7);
                 java.sql.Date datum = rs7.getDate("datum");
@@ -152,12 +148,12 @@ public class ShoeProgram {
                 temp.setStatus(statusEnum); //sätter enumet som värde
                 bestallning.add(temp);
             }
-             // bestallning.forEach(m -> System.out.println(m.getId() + " " + m.getDatum() + " " + m.getKundID() + " " + m.getStatus()));
 
             //Query samt objekt för Skoval
             ResultSet rs8 = stmt.executeQuery("select id, antal, beställningID, skoID from Skoval");
             while (rs8.next()) {
                 Skoval temp = new Skoval();
+
                 int id8 = rs8.getInt("id");
                 temp.setId(id8);
                 int antal = rs8.getInt("antal");
@@ -168,22 +164,20 @@ public class ShoeProgram {
                 temp.setSkoID(skoID8);
                 skoval.add(temp);
             }
-            //skoval.forEach(m -> System.out.println(m.getId() + " " + m.getAntal() + " " + m.getBestallningID() + " " +
-            //        m.getSkoID()));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    //Själva programmet - gentemot objekten BARA
+    //Själva programmet som interagerar mot objekten
+
     public void verifyEmail() {
         boolean matchingEmail = false;
 
         System.out.println("Hej, skriv in din e-postadress för att logga in på ditt konto:");
         String inputEmail = sc.nextLine();
 
-        //Loopa genom listan med alla kunder
         for (Kund k : kund) {
             if (k.getEpost().equalsIgnoreCase(inputEmail)) {
                 matchingEmail = true;
@@ -196,7 +190,7 @@ public class ShoeProgram {
             System.out.println("E-postadressen hittad.");
             verifyPassword();
         } else {
-            System.out.println("E-postadressen hittades inte. Pröva igen."); //Få den att loopa i en while loop
+            System.out.println("E-postadressen hittades inte. Pröva igen.");
         }
     }
 
@@ -205,12 +199,11 @@ public class ShoeProgram {
         System.out.println("Skriv in ditt lösenord:");
         String inputPwd = sc.nextLine();
 
-        //Loopa genom listan med alla kunder
         for (Kund k : kund) {
             if (k.getId() == validatedEmailId) {
                 if (k.getLosenord().equals(inputPwd)) {
                     matchingPassword = true;
-                    validatedUserId = k.getId(); //sparar den slutligen inloggade kundens Id för att använda senare TODO
+                    validatedUserId = k.getId(); //sparar den helt inloggade kundens id för att använda senare
                 }
             }
         }
@@ -218,7 +211,7 @@ public class ShoeProgram {
             System.out.println("Lösenordet var rätt. Du är nu inloggad.");
             selectShoe();
         } else {
-            System.out.println("E-postadressen hittades inte. Pröva igen."); //Få den att loopa i en while loop
+            System.out.println("Lösenordet var fel. Pröva igen.");
         }
     }
 
@@ -238,7 +231,7 @@ public class ShoeProgram {
         activeOrderCheck();
     }
 
-    //Hämtar kunds tidigare beställningar och sparar id för kunds aktiva beställning, om sådan finns, annars blir -1
+    //Hämtar kunds tidigare beställningar och sparar id för kunds aktiva beställning, om sådan finns
     public void activeOrderCheck() {
         boolean activeOrderFound = false;
         for (Bestallning b : bestallning) {
@@ -251,33 +244,26 @@ public class ShoeProgram {
         }
         if (!activeOrderFound) {
             System.out.println("Du har ingen aktiv beställning. Skon läggs till i en ny beställning.");
-            activeOrderId = -1;
+            activeOrderId = -1; //Gör så att ny beställning skapas i addShoe()
         }
         addShoe();
     }
 
-// OM det finns en aktiv beställing så ligger dess ID i activeOrderId, annars ligger det -1 där.
-//Metod addShoe där: När användaren har valt ut en unik produkt anropar du din stored procedure (CALLABLE STATEMENT) så att
-//produkten läggs in i aktuell beställningen (eller att en ny beställning, som innehåller vald produkt, skapas upp).
-//SP tar emot 1. beställningsId (activeOrderId), 2. KundId(validatedUserId), 3. ProduktId (shoeInput)
-//Se till att användaren får återkoppling om allt gick bra eller om fel uppstod när en produkt lades till i beställningen.
-//Och en print som verifierar vilket beställningsid och vilken sko som lagts till (vill verifiera).
-    //Anropar, med callable statement, min SP
+    //Anropar, med callable statement, min SP, med -1 om ingen aktiv beställning hittades
     public void addShoe() {
-        System.out.println("Här läggs skon till genom SP...");
         try {
             CallableStatement stm = con.prepareCall("CALL AddToCart(?, ?, ?)");
-            stm.setInt(1,activeOrderId);
-            stm.setInt(2,validatedUserId);
-            stm.setInt(3,shoeInput);
+            stm.setInt(1, activeOrderId);
+            stm.setInt(2, validatedUserId);
+            stm.setInt(3, shoeInput);
             stm.executeQuery();
+            System.out.println("Din beställning är bekräftad.");
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Din beställning gick inte igenom. Pröva igen.");
         }
     }
 
-
-    //Bryt den statiska kontexten
     public static void main(String[] args) {
         new ShoeProgram();
     }
