@@ -9,18 +9,18 @@ import java.util.Scanner;
 
 public class ShoeProgram {
 
-    private final Scanner sc;
     private int validatedEmailId;
     private int validatedUserId;
     private int shoeInput;
     private int activeOrderId;
+    private final Scanner sc;
     Connection con;
 
     private final List<Sko> sko = new ArrayList<>();
     private final List<Kund> kund = new ArrayList<>();
     private final List<Bestallning> bestallning = new ArrayList<>();
 
-    //Skapar upp connection redan i konstruktorn så att jag kan använda den i interaktion med SP senare
+    //Skapar upp Scanner och Connection så att jag kan använda dem senare
     public ShoeProgram() {
         sc = new Scanner(System.in);
         Properties p = new Properties();
@@ -32,6 +32,7 @@ public class ShoeProgram {
                     p.getProperty("name"),
                     p.getProperty("password"));
         } catch (Exception e) {
+            System.out.println("Det gick inte att ansluta till databasen.");
             e.printStackTrace();
         }
 
@@ -42,63 +43,64 @@ public class ShoeProgram {
     public void tablesToObjects() {
         try (Statement stmt = con.createStatement()) {
 
-            //Query samt objekt för Sko
-            ResultSet rs3 = stmt.executeQuery("select id, skonamnTitel, storlek, färg, pris, antal_i_lager from Sko");
-            while (rs3.next()) {
+            //Query samt skapa alla objekt för Sko
+            ResultSet rs1 = stmt.executeQuery("select id, skonamnTitel, storlek, färg, pris, antal_i_lager from Sko");
+            while (rs1.next()) {
                 Sko temp = new Sko();
 
-                int id3 = rs3.getInt("id");
-                temp.setId(id3);
-                String skonamnTitel = rs3.getString("skonamnTitel");
+                int id1 = rs1.getInt("id");
+                temp.setId(id1);
+                String skonamnTitel = rs1.getString("skonamnTitel");
                 temp.setSkonamnTitel(skonamnTitel);
-                int storlek3 = rs3.getInt("storlek");
-                temp.setStorlek(storlek3);
-                String färg3 = rs3.getString("färg");
-                temp.setFarg(färg3);
-                int pris3 = rs3.getInt("pris");
-                temp.setPris(pris3);
-                int antal_i_lager3 = rs3.getInt("antal_i_lager");
-                temp.setAntal_i_lager(antal_i_lager3);
+                int storlek = rs1.getInt("storlek");
+                temp.setStorlek(storlek);
+                String färg = rs1.getString("färg");
+                temp.setFarg(färg);
+                int pris = rs1.getInt("pris");
+                temp.setPris(pris);
+                int antal_i_lager = rs1.getInt("antal_i_lager");
+                temp.setAntal_i_lager(antal_i_lager);
                 sko.add(temp);
             }
 
-            //Query samt objekt för Kund
-            ResultSet rs6 = stmt.executeQuery("select id, för_och_efternamn, ort, epost, losenord from Kund");
-            while (rs6.next()) {
+            //Query samt skapa alla objekt för Kund
+            ResultSet rs2 = stmt.executeQuery("select id, för_och_efternamn, ort, epost, losenord from Kund");
+            while (rs2.next()) {
                 Kund temp = new Kund();
 
-                int id6 = rs6.getInt("id");
-                temp.setId(id6);
-                String för_och_efternamn6 = rs6.getString("för_och_efternamn");
+                int id2 = rs2.getInt("id");
+                temp.setId(id2);
+                String för_och_efternamn6 = rs2.getString("för_och_efternamn");
                 temp.setFor_och_efternamn(för_och_efternamn6);
-                String ort = rs6.getString("ort");
+                String ort = rs2.getString("ort");
                 temp.setOrt(ort);
-                String epost = rs6.getString("epost");
+                String epost = rs2.getString("epost");
                 temp.setEpost(epost);
-                String losenord = rs6.getString("losenord");
+                String losenord = rs2.getString("losenord");
                 temp.setLosenord(losenord);
                 kund.add(temp);
             }
 
-            //Query samt objekt för Beställning
-            ResultSet rs7 = stmt.executeQuery("select id, datum, kundID, status from Beställning");
-            while (rs7.next()) {
+            //Query samt skapa alla objekt för Beställning
+            ResultSet rs3 = stmt.executeQuery("select id, datum, kundID, status from Beställning");
+            while (rs3.next()) {
                 Bestallning temp = new Bestallning();
 
-                int id7 = rs7.getInt("id");
-                temp.setId(id7);
-                java.sql.Date datum = rs7.getDate("datum");
+                int id3 = rs3.getInt("id");
+                temp.setId(id3);
+                java.sql.Date datum = rs3.getDate("datum");
                 temp.setDatum(datum);
-                int kundID7 = rs7.getInt("kundID");
-                temp.setKundID(kundID7);
+                int kundID3 = rs3.getInt("kundID");
+                temp.setKundID(kundID3);
 
-                String statusString = rs7.getString("status"); //hämtar status i form av sträng
+                String statusString = rs3.getString("status"); //hämtar status i form av sträng
                 Bestallning.Status statusEnum = Bestallning.Status.valueOf(statusString); //konverterar till enum
                 temp.setStatus(statusEnum); //sätter enumet som värde
                 bestallning.add(temp);
             }
 
         } catch (SQLException e) {
+            System.out.println("Det gick inte att ladda in information i programmet.");
             e.printStackTrace();
         }
     }
@@ -181,11 +183,10 @@ public class ShoeProgram {
         addShoe();
     }
 
-    //Anropar, med callable statement, min SP, med -1 om ingen aktiv beställning hittades
     public void addShoe() {
         try {
             CallableStatement stm = con.prepareCall("CALL AddToCart(?, ?, ?)");
-            stm.setInt(1, activeOrderId);
+            stm.setInt(1, activeOrderId); //är -1 om ingen aktiv beställning hittades
             stm.setInt(2, validatedUserId);
             stm.setInt(3, shoeInput);
             stm.executeQuery();
