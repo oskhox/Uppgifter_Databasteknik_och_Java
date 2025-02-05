@@ -7,11 +7,6 @@ public class Marke {
 
     public Marke() {}
 
-    public Marke(int id, String namn) {
-        this.id = id;
-        this.namn = namn;
-    }
-
     public int getId() {
         return id;
     }

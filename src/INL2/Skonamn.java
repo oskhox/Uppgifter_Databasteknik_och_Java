@@ -7,11 +7,6 @@ public class Skonamn {
 
     public Skonamn(){}
 
-    public Skonamn(String titel, int markeID) {
-        this.titel = titel;
-        this.markeID = markeID;
-    }
-
     public String getTitel() {
         return titel;
     }

@@ -10,14 +10,6 @@ public class Kund {
 
     public Kund(){}
 
-    public Kund(int id, String for_och_efternamn, String ort, String epost, String losenord) {
-        this.id = id;
-        this.for_och_efternamn = for_och_efternamn;
-        this.ort = ort;
-        this.epost = epost;
-        this.losenord = losenord;
-    }
-
     public int getId() {
         return id;
     }

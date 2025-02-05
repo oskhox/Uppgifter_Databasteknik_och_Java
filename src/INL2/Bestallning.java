@@ -11,13 +11,6 @@ public class Bestallning {
 
     public Bestallning(){}
 
-    public Bestallning(int id, Date datum, int kundID, Status status) {
-        this.id = id;
-        this.datum = datum;
-        this.kundID = kundID;
-        this.status = status;
-    }
-
     protected int id;
     protected java.sql.Date datum;
     protected int kundID;

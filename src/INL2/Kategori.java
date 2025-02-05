@@ -7,11 +7,6 @@ public class Kategori {
 
     public Kategori(){}
 
-    public Kategori(int id, String namn) {
-        this.id = id;
-        this.namn = namn;
-    }
-
     public int getId() {
         return id;
     }

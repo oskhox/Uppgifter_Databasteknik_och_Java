@@ -8,13 +8,6 @@ public class Skoval {
 
     public Skoval(){}
 
-    public Skoval(int id, int antal, int bestallningID, int skoID) {
-        this.id = id;
-        this.antal = antal;
-        this.bestallningID = bestallningID;
-        this.skoID = skoID;
-    }
-
     public int getId() {
         return id;
     }

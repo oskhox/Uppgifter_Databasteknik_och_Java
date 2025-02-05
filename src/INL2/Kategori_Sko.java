@@ -7,11 +7,6 @@ public class Kategori_Sko {
 
     public Kategori_Sko(){}
 
-    public Kategori_Sko(int kategoriID, int skoID) {
-        this.kategoriID = kategoriID;
-        this.skoID = skoID;
-    }
-
     public int getKategoriID() {
         return kategoriID;
     }

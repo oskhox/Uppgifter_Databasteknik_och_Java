@@ -11,15 +11,6 @@ public class Sko {
 
     public Sko() {}
 
-    public Sko(int id, String skonamnTitel, int storlek, String farg, int pris, int antal_i_lager) {
-        this.id = id;
-        this.skonamnTitel = skonamnTitel;
-        this.storlek = storlek;
-        this.farg = farg;
-        this.pris = pris;
-        this.antal_i_lager = antal_i_lager;
-    }
-
     public int getId() {
         return id;
     }
