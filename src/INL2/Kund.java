@@ -18,16 +18,8 @@ public class Kund {
         this.id = id;
     }
 
-    public String getFor_och_efternamn() {
-        return for_och_efternamn;
-    }
-
     public void setFor_och_efternamn(String for_och_efternamn) {
         this.for_och_efternamn = for_och_efternamn;
-    }
-
-    public String getOrt() {
-        return ort;
     }
 
     public void setOrt(String ort) {

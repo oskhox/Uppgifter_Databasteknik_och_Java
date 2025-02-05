@@ -16,14 +16,9 @@ public class ShoeProgram {
     private int activeOrderId;
     Connection con;
 
-    private final List<Marke> marke = new ArrayList<>();
-    private final List<Skonamn> skonamn = new ArrayList<>();
     private final List<Sko> sko = new ArrayList<>();
-    private final List<Kategori> kategori = new ArrayList<>();
-    private final List<Kategori_Sko> kategori_sko = new ArrayList<>();
     private final List<Kund> kund = new ArrayList<>();
     private final List<Bestallning> bestallning = new ArrayList<>();
-    private final List<Skoval> skoval = new ArrayList<>();
 
     //Skapar upp connection redan i konstruktorn så att jag kan använda den i interaktion med SP senare
     public ShoeProgram() {
@@ -47,28 +42,6 @@ public class ShoeProgram {
     public void tablesToObjects() {
         try (Statement stmt = con.createStatement()) {
 
-            //Query samt objekt för Märke
-            ResultSet rs1 = stmt.executeQuery("select id, namn from Märke");
-            while (rs1.next()) {
-                Marke temp = new Marke();
-                int id1 = rs1.getInt("id");
-                temp.setId(id1);
-                String namn1 = rs1.getString("namn");
-                temp.setNamn(namn1);
-                marke.add(temp);
-            }
-
-            //Query samt objekt för Skonamn
-            ResultSet rs2 = stmt.executeQuery("select titel, MärkeID from Skonamn");
-            while (rs2.next()) {
-                Skonamn temp = new Skonamn();
-                String titel1 = rs2.getString("titel");
-                temp.setTitel(titel1);
-                int märkeID = rs2.getInt("märkeID");
-                temp.setMarkeID(märkeID);
-                skonamn.add(temp);
-            }
-
             //Query samt objekt för Sko
             ResultSet rs3 = stmt.executeQuery("select id, skonamnTitel, storlek, färg, pris, antal_i_lager from Sko");
             while (rs3.next()) {
@@ -87,30 +60,6 @@ public class ShoeProgram {
                 int antal_i_lager3 = rs3.getInt("antal_i_lager");
                 temp.setAntal_i_lager(antal_i_lager3);
                 sko.add(temp);
-            }
-
-            //Query samt objekt för Kategori
-            ResultSet rs4 = stmt.executeQuery("select id, namn from Kategori");
-            while (rs4.next()) {
-                Kategori temp = new Kategori();
-
-                int id4 = rs4.getInt("id");
-                temp.setId(id4);
-                String namn4 = rs4.getString("namn");
-                temp.setNamn(namn4);
-                kategori.add(temp);
-            }
-
-            //Query samt objekt för Kategori_sko
-            ResultSet rs5 = stmt.executeQuery("select kategoriID, skoID from Kategori_Sko");
-            while (rs5.next()) {
-                Kategori_Sko temp = new Kategori_Sko();
-
-                int kategoriID = rs5.getInt("kategoriID");
-                temp.setKategoriID(kategoriID);
-                int skoID5 = rs5.getInt("skoID");
-                temp.setSkoID(skoID5);
-                kategori_sko.add(temp);
             }
 
             //Query samt objekt för Kund
@@ -149,29 +98,12 @@ public class ShoeProgram {
                 bestallning.add(temp);
             }
 
-            //Query samt objekt för Skoval
-            ResultSet rs8 = stmt.executeQuery("select id, antal, beställningID, skoID from Skoval");
-            while (rs8.next()) {
-                Skoval temp = new Skoval();
-
-                int id8 = rs8.getInt("id");
-                temp.setId(id8);
-                int antal = rs8.getInt("antal");
-                temp.setAntal(antal);
-                int beställningID8 = rs8.getInt("beställningID");
-                temp.setBestallningID(beställningID8);
-                int skoID8 = rs8.getInt("skoID");
-                temp.setSkoID(skoID8);
-                skoval.add(temp);
-            }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    //Själva programmet som interagerar mot objekten
-
+    //Interaktion med användaren börjar här
     public void verifyEmail() {
         boolean matchingEmail = false;
 

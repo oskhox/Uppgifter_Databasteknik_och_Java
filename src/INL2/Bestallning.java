@@ -24,10 +24,6 @@ public class Bestallning {
         this.id = id;
     }
 
-    public Date getDatum() {
-        return datum;
-    }
-
     public void setDatum(Date datum) {
         this.datum = datum;
     }
