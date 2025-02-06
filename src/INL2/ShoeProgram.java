@@ -15,6 +15,7 @@ public class ShoeProgram {
     private int activeOrderId;
     private final Scanner sc;
     Connection con;
+    Properties p;
 
     private final List<Sko> sko = new ArrayList<>();
     private final List<Kund> kund = new ArrayList<>();
@@ -23,7 +24,7 @@ public class ShoeProgram {
     //Skapar upp Scanner och Connection så att jag kan använda dem senare
     public ShoeProgram() {
         sc = new Scanner(System.in);
-        Properties p = new Properties();
+        p = new Properties();
 
         try {
             p.load(new FileInputStream("src/INL2/Settings.properties"));
