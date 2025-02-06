@@ -185,13 +185,17 @@ public class ShoeProgram {
     }
 
     public void addShoe() {
+        int outputOrderId;
+
         try {
-            CallableStatement stm = con.prepareCall("CALL AddToCart(?, ?, ?)");
+            CallableStatement stm = con.prepareCall("CALL AddToCart(?, ?, ?, ?)");
             stm.setInt(1, activeOrderId); //är -1 om ingen aktiv beställning hittades
             stm.setInt(2, validatedUserId);
             stm.setInt(3, shoeInput);
+            stm.registerOutParameter(4, Types.INTEGER); //det som kommer UT ur SP. Den är tom innan nu.
             stm.executeQuery();
-            System.out.println("Din beställning är bekräftad.");
+            outputOrderId = stm.getInt(4);
+            System.out.println("Din beställning är bekräftad. Din beställningsreferens är " + outputOrderId + ".");
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Din beställning gick inte igenom. Pröva igen.");
